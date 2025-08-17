@@ -1,0 +1,41 @@
+{% extends 'main/admin_layout.html' %}
+
+{% load static %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+{% endblock %}
+
+{% block title %}Скарги на користувачів{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1> Скарги на користувачів </h1>
+        {% for el in complaints_list %}
+            <div class="alert alert-warning">
+                <p> Подав(-ла) скаргу: {{ el.complainant.username }} </p>
+                <p> Скарга на: {{ el.offender.username }}</p>
+                <p> Причина {{ el.reason }} </p>
+                <p> Опис скарги: {{ el.description }} </p>
+                <p> Дата та час створення: {{ el.creation_time }} </p>
+                <p> Дата та час прийняття адміністратором: {{ el.acceptance_time|default:"—" }} </p>
+                <div class="button-row-user">
+                    {% if not el.is_accepted %}
+                        <form method="post" action="{% url 'accept-complaint' %}" class="btn-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-warning">Прийняти</button>
+                            <input type="hidden" name="complaint_id" value="{{ el.id }}">
+                        </form>
+                    {% endif %}
+                    {% if el.is_accepted %}
+                        <form method="post" action="{% url 'reject-complaint' %}" class="btn-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Відхилити</button>
+                            <input type="hidden" name="complaint_id" value="{{ el.id }}">
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends base_template %}
+
+{% load static %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    <div class="rating-client-performer">
+        <h3>🔝 Рейтинг виконавців за спеціальностями</h3>
+        {% for specialty, performers in performer_ratings.items %}
+            <h4>{{ specialty }}</h4>
+            <table border="1">
+                <tr>
+                    <th>Місце</th>
+                    <th>Ім'я</th>
+                    <th>Email</th>
+                    <th>Місто</th>
+                    <th>Стартова вартість</th>
+                    <th>Доступний для замовлень</th>
+                    <th>Кількість виконаних замовлень</th>
+                </tr>
+                {% for performer in performers %}
+                    <tr>
+                        <td>{{ performer.rank }}</td>
+                        <td>{{ performer.username }}</td>
+                        <td>{{ performer.email }}</td>
+                        <td>{{ performer.city_name }}</td>
+                        <td>{{ performer.initial_cost }}</td>
+                        <td>{{ performer.is_available_for_orders|yesno:"Так,Ні" }}</td>
+                        <td>{{ performer.successful_orders_count }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+
+        <h3>📈 Рейтинг напрямків за успішно виконаними замовленнями</h3>
+        <table border="1">
+            <tr>
+                <th>Напрямок</th>
+                <th>Кількість успішних замовлень</th>
+            </tr>
+            {% for branch in completed_branches %}
+                <tr>
+                    <td>{{ branch.branch_name }}</td>
+                    <td>{{ branch.completed_orders_count }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <h3>🕓 Рейтинг напрямків за активними замовленнями</h3>
+        <table border="1">
+            <tr>
+                <th>Напрямок</th>
+                <th>Кількість активних замовлень</th>
+            </tr>
+            {% for branch in active_branches %}
+                <tr>
+                    <td>{{ branch.branch_name }}</td>
+                    <td>{{ branch.active_orders_count }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% if user.role == 'Адміністратор' %}
+            <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+                <a href="{% url 'warned-users' %}" class="btn btn-warning">Попереджені користувачі</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

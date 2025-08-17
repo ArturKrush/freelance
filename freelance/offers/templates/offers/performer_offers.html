@@ -1,0 +1,106 @@
+{% extends 'main/performer_layout.html' %}
+
+{% load static %}
+
+{% block title %}Мої пропозиції{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+    <style>
+        .rating-card {
+            background-color: #f8f9fa;
+            border-left: 3px solid #ffc107;
+            padding: 4px 8px;
+            margin-top: 4px;
+            border-radius: 4px;
+            box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .rating-label {
+            font-weight: 600;
+            color: #555;
+            margin: 0;
+        }
+
+        .rating-value {
+            color: #007bff;
+            margin: 0;
+            text-align: center;
+        }
+
+        .rating-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+            margin-top: 8px;
+            margin-left: 110px;
+            margin-bottom: 12px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1> Мої пропозиції </h1>
+        {% for el in offers %}
+            <div class="alert alert-warning">
+                <h3 class="order-topic">До замовлення: {{ el.order.topic }}</h3>
+                <p>Статус пропозиції: {{ el.offer_status }}</p>
+                <p>Ціна, що пропонується: {{ el.offer_price }}</p>
+                <p class="offer-description">{{ el.offer_text|default:"—" }}</p>
+                <p>Дата та час створення: {{ el.creation_time }}</p>
+                <p>Дата та час прийняття: {{ el.acceptance_time|default:"—" }}</p>
+                <p>Дата та час оновлення: {{ el.update_time }}</p>
+
+                <p class="list-group-item-offer">
+                    Чи погоджено розрив:
+                    {% if el.is_breaking_agreed %}
+                        <span class="badge bg-success">Так</span>
+                    {% else %}
+                        <span class="badge bg-danger">Ні</span>
+                    {% endif %}
+                </p>
+
+                {% if el.is_breaking_agreed %}
+                    <p>Дата та час розриву: {{ el.breaking_time }}</p>
+                {% endif %}
+
+                <div class="button-row-offer">
+                    {% if el.offer_status == 'Розглядається' %}
+                        <a href="{% url 'offer-update' el.id %}" class="btn btn-secondary">Змінити</a>
+                    {% endif %}
+
+                    {% if el.offer_status == 'Розглядається' %}
+                        <a href="{% url 'offer-delete' el.id %}" class="btn btn-dark">Видалити</a>
+                    {% endif %}
+
+                    {% if el.is_breaking_agreed and el.order.order_status != 'Виконане успішно' and el.order.order_status != 'Виконане невдало' %}
+                        <form method="post" action="{% url 'disagree-break' %}" class="btn-form-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-warning btn-progress-offer">Заборонити розрив</button>
+                            <input type="hidden" name="offer_id" value="{{ el.id }}">
+                        </form>
+                    {% endif %}
+                    {% if not el.is_breaking_agreed and el.order.order_status != 'Виконане успішно' and el.order.order_status != 'Виконане невдало' %}
+                        <form method="post" action="{% url 'agree-break' %}" class="btn-form-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-warning btn-progress-offer">Дозволити розрив</button>
+                            <input type="hidden" name="offer_id" value="{{ el.id }}">
+                        </form>
+                    {% endif %}
+                    {# <a href="{% url 'performers-detail' el.performer.id %}" class="btn btn-warning">Про виконавця</a> #}
+                </div>
+            </div>
+        {% endfor %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

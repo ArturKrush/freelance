@@ -1,0 +1,13 @@
+{% extends 'main/performer_layout.html' %}
+
+{% block title %}Видалення роботи з портфоліо{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h4> Ви впевнені, що хочете видалити цей запис? </h4>
+        <form method="post">
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit">Видалити запис</button>
+        </form>
+    </div>
+{% endblock %}

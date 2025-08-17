@@ -1,0 +1,42 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/search.css' %}">
+{% endblock %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="card shadow">
+            <div class="card-header text-center bg-dark text-white">
+                <h3>{{ user.username }}</h3>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Роль у системі:</strong> {{ user.role }}</li>
+                <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+                <li class="list-group-item"><strong>Номер телефону:</strong> {{ user.phone_num }}</li>
+                <li class="list-group-item"><strong>Місто:</strong> {{ user.city.city_name }}</li>
+                <li class="list-group-item"><strong>Банківський рахунок:</strong> {{ user.account }}</li>
+                <li class="list-group-item">
+                    <strong>Чи заблокований:</strong>
+                    {% if performer.is_banned %}
+                        <span class="badge bg-danger">Так</span>
+                    {% else %}
+                        <span class="badge bg-success">Ні</span>
+                    {% endif %}
+                </li>
+                <li class="list-group-item"><strong> Кількість успішних замовлень:</strong> {{ successful_orders_count }} </li>
+            </ul>
+        </div>
+        {% if perf_requested == False %}
+            <div class="text-center mt-4">
+                <a href="{% url 'update-client-profile' user.id %}" class="btn btn-primary">Редагувати</a>
+                <a href="{% url 'user-complaints' user.id %}" class="btn btn-secondary">Скарги</a>
+                <a href="{% url 'admin-profile' %}" class="btn btn-light">Допомога</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

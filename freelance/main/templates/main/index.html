@@ -1,0 +1,17 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+{% block title %}Головна сторінка{% endblock %}
+
+    {% block css_block %}
+        <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+    {% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1> {{ title }} </h1>
+        <p> Раді вітати вас на біржі! </p>
+        <a href="{% url 'orders-home' %}"><button class="btn btn-warning"> Перейти до проектів </button></a>
+    </div>
+{% endblock %}

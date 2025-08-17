@@ -1,0 +1,147 @@
+body{
+    background: #2c2c2c;
+}
+
+aside{
+    float: left;
+    background: #181818;
+    width: 20%;
+    padding: 2.5%; /*внутренние отступы*/
+    height: 100vh;
+    color: #fff; /*цвет текста - белый*/
+    border-right: 5px solid #4d4d4d;
+}
+
+aside .logo
+{
+    font-size: 30px;
+    margin-left: 10px; /*отступ с левой стороны*/
+    font-weight: bold;
+    position: relative;
+    top: -5px;
+}
+
+aside h3
+{
+    margin-top: 50px;
+    font-size: 30px;
+}
+
+aside ul {list-style: none;}
+aside ul li {
+    margin-left: -10px;
+    color: #fff;
+    display: block;
+    margin-top: 20px;
+    transition: transform .6s ease; /*добавляем плавность при наведении на ссылку*/
+}
+
+aside ul li:hover, aside ul a:hover{
+    /*color: #eb5959;*/
+    color: #80d9ff;
+    text-decoration: none;
+    transform: scale(1.05); /*размер текста +5%*/
+}
+
+aside ul a {
+    color: #fff;
+    text-decoration: none;
+}
+
+main .features{
+    float: left; /*позиціонування*/
+    color: #fff;
+    margin-top: 15px;
+    text-align: center;
+    width: 75%;
+    padding-bottom: 50px;
+}
+
+/* Перший h1 — заголовок сторінки: ліворуч */
+.features > h1 {
+    font-size: 25px;
+    margin-top: 10px;
+    margin-left: 230px;
+    text-align: left;  /* Текст по лівому краю */
+}
+
+/* Другий h1 — ім’я виконавця: праворуч */
+.alert.alert-warning h1 {
+    font-size: 20px;
+    text-align: center;     /* Текст всередині елемента вирівнюється праворуч */
+    margin-right: 10px;    /* Додатково можна підсунути */
+}
+
+main .features p{max-width: 500px; margin: 20px auto;}
+
+.alert-warning {
+    width: 400px;
+    margin-left: 700px; /* або скільки треба */
+    /*margin-top: 10px;*/
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.btn-info {
+    margin-left: 30px; /* посуне кнопку теж трохи правіше */
+    margin-top: 20px;
+
+}
+
+.badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+.badge-success {
+    background-color: green;
+}
+.badge-danger {
+    background-color: red;
+}
+
+.container.mt-4 {
+    width: 800px;
+    margin-left: 500px; /* зсув вправо на 500px */
+}
+
+form{
+    margin-left: 32%;
+    width: 500px;
+    margin-top: 50px;
+}
+
+.search-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.input-container {
+    margin-bottom: 10px;
+}
+
+.search-input {
+    width: 300px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.search-button {
+    padding: 8px 20px;
+    margin-top: 4px;
+    margin-right: 190px;
+}
+
+.form-inline.mb-4{
+    margin-right: 0;   /* прибираємо відступ справа */
+    margin-left: 80px;    /* прибираємо відступ зліва (якщо є) */
+    width: 500px;      /* ширина форми */
+    margin-top: 50px;  /* зверху відступ */
+}

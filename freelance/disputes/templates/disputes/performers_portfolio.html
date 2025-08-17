@@ -1,0 +1,38 @@
+{% extends base_template %}
+
+{% load static %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+{% endblock %}
+
+{% block title %}Записи про портфоліо виконавця{% endblock %}
+
+{% block content %}
+    <div class="features">
+    {% for item in portfolio_list %}
+        {% if item.5 == 'manual' %}
+            <div class="alert alert-warning">
+                <h5>Портфоліо додане виконавцем</h5>
+                <p><strong>Опис:</strong> {{ item.0 }}</p>
+                <p><strong>Дата:</strong> {{ item.1 }}</p>
+                {% if item.2 %}
+                    <p><strong>Скріншот:</strong> {{ item.2 }} </p>
+                {% endif %}
+            </div>
+        {% elif item.5 == 'auto' %}
+            <div class="alert alert-success">
+                <h5>Успішно виконана робота на біржі</h5>
+                <p><strong>Опис замовлення:</strong> {{ item.0 }}</p>
+                <p><strong>Завершено:</strong> {{ item.1 }}</p>
+                {% if item.2 %}
+                    <p><strong>Скріншот:</strong> {{ item.2 }} </p>
+                {% endif %}
+                {% if item.4 %}
+                    <p><strong>Напрямки:</strong> {{ item.4 }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends 'main/performer_layout.html' %}
+
+{% load static %}
+
+{% block title %}Пошук замовлень{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/search.css' %}">
+    <style>
+        .search-wrapper {
+            display: flex;
+            justify-content: flex-start; /* штовхає вліво */
+            padding-right: 38rem; /* або скільки потрібно */
+        }
+
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* всі поля ліворуч */
+            gap: 1rem;
+        }
+
+        .form-group {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* для всіх полів, крім напрямків */
+            margin-bottom: 1.5rem;
+        }
+
+        /* Окрема група для напрямків, щоб вирівняти вміст ліворуч */
+        .form-group.branch-group {
+            align-items: flex-start;
+        }
+
+        .checkbox-group label {
+            color: white;
+            font-weight: normal;
+        }
+
+        input[type="text"] {
+            width: 100%;
+        }
+
+        .center-button {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Стилі для блоку напрямків */
+        .branch-checkboxes {
+            width: 100%;
+            max-height: none; /* Прибираємо обмеження по висоті */
+            overflow-y: visible; /* Без прокрутки */
+            padding: 0; /* Прибираємо внутрішні відступи */
+            background-color: transparent; /* Прибираємо фон */
+            box-sizing: border-box;
+            color: white;
+        }
+
+        .branch-checkboxes ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* чекбокси зліва */
+            width: 100%;
+        }
+
+        .branch-checkboxes li {
+            margin-bottom: 4px;
+            width: 100%;
+        }
+
+        .branch-checkboxes label {
+            display: inline-block;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        button[type="submit"] {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .form-group label {
+            align-self: center;
+            color: white;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1>Знайти замовлення</h1>
+        <div class="search-wrapper">
+            <form method="get" action="" class="search-form">
+                <div class="form-group">
+                    {{ form.specialty.label_tag }}
+                    {{ form.specialty }}
+                </div>
+
+                {% if form.branch %}
+                    <div class="form-group branch-group">
+                        <label>Напрямки:</label>
+                        <div class="branch-checkboxes">
+                            {{ form.branch }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    {{ form.q }}
+                </div>
+
+                <div class="form-group center-button">
+                    <button type="submit" class="btn btn-primary">Пошук</button>
+                </div>
+            </form>
+        </div>
+
+        {% for el in orders %}
+            <div class="alert alert-warning">
+                <h1>{{ el.topic }}</h1>
+
+                <p>Напрямки: {{ el.branches }}</p>
+                <p> Стан:
+                    {% if el.order_status == 'Нове' %}
+                        <span class="badge bg-success">Нове</span>
+                    {% elif el.order_status == 'Очікує нової пропозиції' %}
+                        <span class="badge bg-warning">Очікує нової пропозиції</span>
+                    {% endif %}
+                </p>
+
+                <p> Кількість успішних проєктів замовника: {{ el.client_success_orders }} </p>
+
+                <p>Дата та час створення: {{ el.creation_time }}</p>
+
+                <div class="button-row d-flex justify-content-center flex-wrap gap-2">
+                    <a href="{% url 'orders-detail' el.order_id %}" class="btn btn-light">Детальніше</a>
+                    <a href="{% url 'client-profile' el.client_id %}" class="btn btn-secondary">Про замовника</a>
+                    <a href="{% url 'create-offer' el.order_id %}" class="btn btn-success">Подати пропозицію</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

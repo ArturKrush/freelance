@@ -1,0 +1,36 @@
+{% extends 'main/performer_layout.html' %}
+
+{% load static %}
+
+{% block title %}Ваші замовлення{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1> Лист замовлень </h1>
+        {% for el in orders %}
+            <div class="alert alert-warning">
+                <h3 class="order-topic">{{ el.topic }}</h3>
+                 <p>Напрямки:
+                     {% for ref in el.refers.all %}
+                         {{ ref.spec_branch.branch_name }}{% if not forloop.last %}, {% endif %}
+                     {% empty %}
+                         Немає напрямків
+                     {% endfor %}
+                 </p>
+                <p class="order-description">{{ el.description }}</p>
+                <p> Дедлайн виконання: {{ el.order_deadline }} </p>
+                <p> Стан: {{ el.order_status }} </p>
+                <div class="button-group">
+                    <a href="{% url 'orders-detail' el.id %}" class="btn btn-secondary">Детальніше</a>
+                    <a href="{% url 'perf-progress' el.id %}" class="btn btn-success btn-progress">Записи про прогрес</a>
+                    <a href="{% url 'client-profile' el.client.id %}" class="btn btn-warning">Про замовника</a>
+                </div>
+            </div>
+        {% endfor %}
+        {# <a href="{% url 'create-order' %}"><button class="btn btn-info"><i class="fas fa-plus-circle"></i> Створити нове замовлення </button> </a> #}
+    </div>
+{% endblock %}

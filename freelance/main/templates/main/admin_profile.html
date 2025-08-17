@@ -1,0 +1,31 @@
+{% extends 'main/admin_layout.html' %}
+
+{% load static %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/search.css' %}">
+{% endblock %}
+
+{% block title %} Профіль адміністратора {% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="card shadow">
+            <div class="card-header text-center bg-dark text-white">
+                <h3>{{ admin.username }}</h3>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Роль у системі:</strong> {{ admin.role }}</li>
+                <li class="list-group-item"><strong>Email:</strong> {{ admin.email }}</li>
+                <li class="list-group-item"><strong>Номер телефону:</strong> {{ admin.phone_num }}</li>
+                <li class="list-group-item"><strong>Місто:</strong> {{ admin.city.city_name }}</li>
+                <li class="list-group-item"><strong>Банківський рахунок:</strong> {{ admin.account }}</li>
+            </ul>
+        </div>
+        <div class="text-center mt-4">
+            {% if user.role == 'Адміністратор' %}
+                <a href="{% url 'update-admin-profile' %}" class="btn btn-primary">Редагувати</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

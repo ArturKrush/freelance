@@ -1,0 +1,28 @@
+{% extends 'main/layout.html' %}
+{% block title %}Завершення замовлення: {{ order.topic }}{% endblock %}
+
+{% load static %}
+
+ {% block css_block %}
+     <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+ {% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Завершення замовлення: {{ order.topic }}</h2>
+    <form method="post" class="form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-danger button-complete-order">Завершити</button>
+    </form>
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="color: white;">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

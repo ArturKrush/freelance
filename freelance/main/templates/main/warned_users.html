@@ -1,0 +1,45 @@
+{% extends 'main/admin_layout.html' %}
+
+{% load static %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="warned-users">
+        <h2>Попереджені користувачі</h2>
+
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+            <tr>
+                <th>Ім’я користувача</th>
+                <th>Роль</th>
+                <th>Кількість прийнятих скарг</th>
+                <th>Заблокований</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in table %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.get_role_display }}</td>
+                    <td>{{ user.accepted_complaints_count }}</td>
+                    <td>
+                        {% if user.is_banned %}
+                            <span class="badge bg-danger">Так</span>
+                        {% else %}
+                            <span class="badge bg-success">Ні</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">Немає попереджених користувачів.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

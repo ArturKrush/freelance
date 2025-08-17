@@ -1,0 +1,50 @@
+{% extends base_template %}
+
+{% load static %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/search.css' %}">
+{% endblock %}
+
+{% block title %}{{ performer.username }}{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="card shadow">
+            <div class="card-header text-center bg-dark text-white">
+                <h3>{{ performer.username }}</h3>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Email:</strong> {{ performer.email }}</li>
+                <li class="list-group-item"><strong>Номер телефону:</strong> {{ performer.phone_num }}</li>
+                <li class="list-group-item"><strong>Місто:</strong> {{ performer.city.city_name }}</li>
+                <li class="list-group-item"><strong>Банківський рахунок:</strong> {{ performer.account }}</li>
+                <li class="list-group-item"><strong>Початкова вартість послуг:</strong> {{ performer.initial_cost }}</li>
+                <li class="list-group-item">
+                <strong>Вільний для нових замовлень:</strong>
+                {% if performer.is_available_for_orders %}
+                    <span class="badge bg-success">Так</span>
+                {% else %}
+                    <span class="badge bg-danger">Ні</span>
+                {% endif %}
+                </li>
+                    <li class="list-group-item">
+                    <strong>Чи заблокований:</strong>
+                    {% if performer.is_banned %}
+                        <span class="badge bg-danger">Так</span>
+                    {% else %}
+                        <span class="badge bg-success">Ні</span>
+                    {% endif %}
+                </li>
+            {# <li class="list-group-item"> <strong> Середня оцінка: </strong> {{ performer.avg_rating }} </li> #}
+            </ul>
+            <div class="card-body">
+                <p class="card-text">{{ performer.profile_text }}</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+            <a href="{% url 'performers-reviews' performer.id %}" class="btn btn-warning">Переглянути відгуки</a>
+            <a href="{% url 'performers-portfolio' performer.id %}" class="btn btn-success btn-progress">Переглянути портфоліо</a>
+        </div>
+    </div>
+{% endblock %}

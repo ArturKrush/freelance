@@ -1,0 +1,30 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Оновлення профілю{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1> Оновлення профілю </h1>
+        <form method="post"> <!-- action - страница на которой будут обрабатываться данные полученные из формы-->
+            {% csrf_token %}
+
+            <div class="mb-3">
+                {{ form.email }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.phone_num }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.account }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.city }}
+            </div>
+
+            <button class="btn btn-success" type="submit">Оновити</button> <!-- при submit происходит перезагрузка струницы и отправка данных на сервер -->
+        </form>
+    </div>
+{% endblock %}

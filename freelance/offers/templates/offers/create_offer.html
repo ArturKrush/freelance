@@ -1,0 +1,22 @@
+{% extends 'main/performer_layout.html' %}
+
+{% block title %}Створення пропозиції{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1> Сформуйте пропозицію </h1>
+        <form method="post">
+           {% csrf_token %}
+
+            <div class="mb-3">{{ form.offer_price }}</div>
+            <div class="mb-3">
+                {{ form.offer_text }}
+            </div>
+            <div class="mb-3">
+                <p>Чи прийнятний розрив замовником без попередження? Так: {{ form.is_breaking_agreed }}</p>
+            </div>
+
+            <button class="btn btn-success" type="submit">Прийняти</button>
+        </form>
+    </div>
+{% endblock %}

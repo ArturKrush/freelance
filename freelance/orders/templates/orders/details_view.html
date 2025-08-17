@@ -1,0 +1,36 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/search.css' %}">
+{% endblock %}
+
+{% block title %}{{ order.topic }}{% endblock %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header text-center bg-dark text-white">
+            <h3>{{ order.topic }}</h3>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ order.description }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Виконавець:</strong> {{ performer_username|default:"—" }}</li>
+            <li class="list-group-item"><strong>Стан:</strong> {{ order.order_status }}</li>
+            <li class="list-group-item"><strong>Крайній строк виконання:</strong> {{ order.order_deadline }}</li>
+            {% if order.status != 'Нове' and order.status != 'Очікує початку роботи' %}
+                <li class="list-group-item"><strong>Дата та час початку роботи:</strong> {{ order.start_of_work |default:"—" }}</li>
+                {% if order.status != 'Виконане успішно' or order.status != 'Виконане невдало' %}
+                    <li class="list-group-item"><strong> Дата та час завершення роботи:</strong> {{ order.completion_time|default:"—" }}</li>
+                    <li class="list-group-item"><strong> Мій відгук:</strong> {{ order.final_review|default:"—" }}</li>
+                    <li class="list-group-item"><strong> Моя оцінка:</strong> {{ order.performance_grade|default:"—" }}</li>
+                    <li class="list-group-item"><strong> Дата та час оновлення:</strong> {{ order.update_time }}</li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

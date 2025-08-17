@@ -1,0 +1,110 @@
+{% extends base_template %}
+
+{% load static %}
+
+{% block title %}Пошук виконавців{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/search.css' %}">
+    <style>
+        .rating-card {
+            background-color: #f8f9fa;
+            border-left: 3px solid #ffc107;
+            padding: 4px 8px;
+            margin-top: 4px;
+            border-radius: 4px;
+            box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .rating-label {
+            font-weight: 600;
+            color: #555;
+            margin: 0;
+        }
+
+        .rating-value {
+            color: #007bff;
+            margin: 0;
+        }
+
+        .rating-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+            margin-top: 8px;
+            margin-left: 110px;
+            margin-bottom: 12px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1>Знайти виконавця</h1>
+        <form method="get" action="{% url 'performers-search' %}" class="form-inline mb-4">
+            <div class="mb-3">
+                {{ form.specialty.label_tag }}<br>
+                {{ form.specialty }}
+            </div>
+            <div class="mb-3">
+                {{ form.branch.label_tag }}<br>
+                {{ form.branch }}
+            </div>
+            <div class="mb-3">
+                {{ form.min_cost.label_tag }}
+                {{ form.min_cost }}
+            </div>
+            <div class="mb-3">
+                {{ form.max_cost.label_tag }}
+                {{ form.max_cost }}
+            </div>
+            <div class="mb-3">
+                {{ form.availability.label_tag }}<br>
+                {{ form.availability }}
+            </div>
+            <div class="mb-3">
+                {{ form.q }} <br>
+            </div>
+            <button type="submit" class="btn btn-primary">Пошук</button>
+        </form>
+
+        {% for el in performers %}
+            <div class="alert alert-warning">
+                <h1>{{ el.username }}</h1>
+
+                <p>Напрямки:
+                    {% for spec in el.spec_branches.all %}
+                        {{ spec.branch_name }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        (Немає напрямків)
+                    {% endfor %}
+                </p>
+
+                <p>
+                    Вільний для нових замовлень:
+                    {% if el.is_available_for_orders %}
+                        <span class="badge badge-success">Так</span>
+                    {% else %}
+                        <span class="badge badge-danger">Ні</span>
+                    {% endif %}
+                </p>
+
+                <p>Початкова вартість послуг: {{ el.initial_cost }}</p>
+                <p>Місто: {{ el.city.city_name }}</p>
+
+                <div class="rating-container">
+                    <div class="rating-card">
+                        <p class="rating-label">Середня оцінка:</p>
+                        {{ el.avg_rating|floatformat:1|default:"—" }}
+                    </div>
+                </div>
+
+                <a href="{% url 'performers-detail' el.id %}" class="btn btn-warning">Детальніше</a>
+                {% if user.role == 'Адміністратор'%}
+                    <a href="" class="btn btn-danger">Заблокувати</a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

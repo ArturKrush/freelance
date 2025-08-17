@@ -1,0 +1,50 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+{% endblock %}
+
+{% block title %}Скарги на Вас{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1> Скарги на Вас </h1>
+        {% for el in complaints_list %}
+            <div class="alert alert-warning">
+                <p> Подав(-ла) скаргу: {{ el.complainant.username }} </p>
+                <p> Причина {{ el.reason }} </p>
+                <p> Опис скарги: {{ el.description }} </p>
+                <p> Дата та час створення: {{ el.creation_time }} </p>
+                <p> Дата та час прийняття адміністратором: {{ el.acceptance_time }} </p>
+            </div>
+        {% endfor %}
+        <form method="post" action="{% url 'user-complaints' offender_id %}">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                {{ form.offender}}
+            </div>
+
+             <div class="mb-3">
+                 {{ form.reason}}
+             </div>
+
+            <div class="mb-3">
+                {{ form.description}}
+            </div>
+
+            <button type="submit" class="btn btn-warning mt-2">Подати скаргу</button>
+        </form>
+        {% if messages %}
+            <div>
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

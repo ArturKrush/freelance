@@ -1,0 +1,97 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+{% block title %}Пропозиції для мене{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+    <style>
+        .rating-card {
+            background-color: #f8f9fa;
+            border-left: 3px solid #ffc107;
+            padding: 4px 8px;
+            margin-top: 4px;
+            border-radius: 4px;
+            box-shadow: 0 0.5px 1px rgba(0,0,0,0.05);
+        }
+        .rating-label {
+            font-weight: 600;
+            color: #555;
+            margin: 0;
+        }
+        .rating-value {
+            color: #007bff;
+            margin: 0;
+            text-align: center;
+        }
+        .rating-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+            margin-top: 8px;
+            margin-left: 110px;
+            margin-bottom: 12px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1> Пропозиції від виконавців </h1>
+        {% for el in offers %}
+            <div class="alert alert-warning">
+                <h3 class="order-topic">До замовлення: {{ el.order_topic }}</h3>
+                <p>Статус пропозиції: {{ el.offer_status }}</p>
+                <p>Виконавець: {{ el.performer.username }}</p>
+
+                <div class="rating-container">
+                    <div class="rating-card">
+                        <p class="rating-label">Середня оцінка виконавця:</p>
+                        <p class="rating-value">{{ el.avg_grade|floatformat:1|default:"—" }}</p>
+                    </div>
+                </div>
+                <p>Ціна, що пропонується: {{ el.offer_price }}</p>
+                <p class="offer-description">Текст пропозиції: {{ el.offer_text|default:"—" }}</p>
+                <p>Дата та час створення: {{ el.creation_time }}</p>
+
+                <p class="list-group-item-offer">
+                    Чи погоджено розрив:
+                    {% if el.is_breaking_agreed %}
+                        <span class="badge bg-success">Так</span>
+                    {% else %}
+                        <span class="badge bg-danger">Ні</span>
+                    {% endif %}
+                </p>
+
+                <div class="button-row-offer">
+                    {% if el.offer_status != 'Прийнято'%}
+                        <form method="post" action="{% url 'accept-offer' %}" class="btn-form-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success btn-progress-offer">Прийняти</button>
+                            <input type="hidden" name="offer_id" value="{{ el.id }}">
+                        </form>
+                    {% endif %}
+                    <a href="{% url 'performers-detail' el.performer.id %}" class="btn btn-warning">Про виконавця</a>
+                    {% if el.offer_status != 'Відхилено'%}
+                        <form method="post" action="{% url 'reject-offer' %}" class="btn-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-complete-offer">Відхилити </button>
+                            <input type="hidden" name="offer_id" value="{{ el.id }}">
+                        </form>
+                    {% endif %}
+                 </div>
+            </div>
+        {% endfor %}
+        {% if messages %}
+            <div class="container mt-3">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

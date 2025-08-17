@@ -1,0 +1,48 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+{% block title %}Ваші проєкти{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1> Лист проєктів </h1>
+        {% for el in orders %}
+            <div class="alert alert-warning">
+                <h3 class="order-topic">{{ el.topic }}</h3>
+                 <p>Напрямки:
+                     {% for ref in el.refers.all %}
+                         {{ ref.spec_branch.branch_name }}{% if not forloop.last %}, {% endif %}
+                     {% empty %}
+                         Немає напрямків
+                     {% endfor %}
+                 </p>
+                <p class="order-description">{{ el.description }}</p>
+                <p> Дедлайн виконання: {{ el.order_deadline }} </p>
+                <p> Стан: {{ el.order_status }} </p>
+                <div class="button-group">
+                    <a href="{% url 'orders-detail' el.id %}" class="btn btn-warning">Детальніше</a>
+                    <a href="{% url 'order-progress-list' el.id %}" class="btn btn-success btn-progress">Переглянути прогрес</a>
+
+                    {% if el.order_status != 'Виконане успішно' and el.order_status != 'Виконане невдало' and el.order_status != 'Нове' %}
+                        <a href="{% url 'complete-order-form' el.id %}" class="btn btn-danger">Завершити</a>
+                    {% endif %}
+
+                    {% if el.order_status == 'Нове' %}
+                        <a href="{% url 'order-update' el.id %}" class="btn btn-secondary">Змінити</a>
+                    {% endif %}
+
+                    {% if el.order_status == 'Нове' %}
+                        <a href="{% url 'order-delete' el.id %}" class="btn btn-dark"> Видалити</a>
+                    {% endif %}
+
+                </div>
+            </div>
+        {% endfor %}
+        <a href="{% url 'create-order' %}"><button class="btn btn-info"><i class="fas fa-plus-circle"></i> Створити нове замовлення </button> </a>
+    </div>
+{% endblock %}

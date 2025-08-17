@@ -1,0 +1,40 @@
+{% extends base_template %}
+
+{% load static %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+{% endblock %}
+
+{% block title %}Відгуки про виконавця{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1> Відгуки про виконавця </h1>
+        {% for el in reviews_list %}
+            <div class="alert alert-warning">
+                <p> Зробив(-ла) відгук: {{ el.commentator.username }} </p>
+                <p> {{ el.review_text }} </p>
+                <p> Дата та час створення: {{ el.creation_time }} </p>
+                <p> Дата та час оновлення: {{ el.update_time }} </p>
+            </div>
+        {% endfor %}
+        {% if current_user.role != 'Адміністратор' %}
+            <form class="form-inline mb-4 review" method="post"
+                  action="{% url 'create-review' performer_id=performer_id %}">
+                {% csrf_token %}
+                {{ form.review_text }}
+                <button type="submit" class="btn btn-success mt-2">Залишити відгук</button>
+            </form>
+        {% endif %}
+        {% if messages %}
+            <div>
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

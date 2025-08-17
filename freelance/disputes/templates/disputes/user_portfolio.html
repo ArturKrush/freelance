@@ -1,0 +1,65 @@
+{% extends 'main/performer_layout.html' %}
+
+{% load static %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+{% endblock %}
+
+{% block title %}Ваше портфоліо{% endblock %}
+
+{% block content %}
+    <div class="features">
+        {% for item in portfolio_list %}
+            {% if item.6 == 'manual' %}
+                <div class="alert alert-warning">
+                    <h5>Додане Вами портфоліо</h5>
+                    <p><strong>Опис:</strong> {{ item.1 }}</p>
+                    <p><strong>Дата:</strong> {{ item.2 }}</p>
+                    {% if item.3 %}
+                        <p><strong>Скріншот:</strong> {{ item.3 }} </p>
+                    {% endif %}
+                    <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+                        <a href="" class="btn btn-primary">Змінити</a>
+                        <a href="{% url 'delete-portfolio' item.0 %}" class="btn btn-danger"> Видалити</a>
+                    </div>
+                </div>
+            {% elif item.6 == 'auto' %}
+                <div class="alert alert-success">
+                    <h5>Успішно виконана робота на біржі</h5>
+                    <p><strong>Опис замовлення:</strong> {{ item.1 }}</p>
+                    <p><strong>Завершено:</strong> {{ item.2 }}</p>
+                    {% if item.3 %}
+                        <p><strong>Скріншот:</strong> {{ item.3 }} </p>
+                    {% endif %}
+                    {% if item.5 %}
+                        <p><strong>Напрямки:</strong> {{ item.5 }}</p>
+                    {% endif %}
+                    <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+                        <a href="" class="btn btn-secondary">Змінити</a>
+                        <a href="" class="btn btn-dark"> Видалити</a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <form method="post" action="{% url 'user-portfolio' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.description }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.screenshot }}
+            </div>
+            <button type="submit" class="btn btn-success mt-2">Створити портфоліо</button>
+        </form>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}

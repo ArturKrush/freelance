@@ -1,0 +1,116 @@
+{% extends 'main/admin_layout.html' %}
+
+{% load static %}
+
+{% block title %}Пошук виконавців{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'main/css/search.css' %}">
+    <style>
+        .rating-card {
+            background-color: #f8f9fa;
+            border-left: 3px solid #ffc107;
+            padding: 4px 8px;
+            margin-top: 4px;
+            border-radius: 4px;
+            box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .rating-label {
+            font-weight: 600;
+            color: #555;
+            margin: 0;
+        }
+
+        .rating-value {
+            color: #007bff;
+            margin: 0;
+        }
+
+        .rating-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+            margin-top: 8px;
+            margin-left: 110px;
+            margin-bottom: 12px;
+        }
+
+        .button-row-user {
+            display: flex;
+            gap: 10px; /* відступ між кнопками */
+            margin-top: 10px;
+            align-items: center;
+        }
+
+        .button-row-user a,
+        .button-row-user form {
+            margin: 0;
+        }
+
+        .button-row-user form {
+            display: inline;
+        }
+
+        .button-row-user button {
+            white-space: nowrap; /* щоб текст не переносився */
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1>Знайти виконавця</h1>
+        <form method="get" action="{% url 'clients-search' %}" class="form-inline mb-4">
+            <div class="mb-3">
+                {{ form.q }} <br>
+            </div>
+            <button type="submit" class="btn btn-primary">Пошук</button>
+        </form>
+
+        {% for el in clients %}
+            <div class="alert alert-warning">
+                <h1>{{ el.username }}</h1>
+
+                <p>Email: {{ el.email }}</p>
+                <p>Рахунок: {{ el.account }}</p>
+                <p>Місто: {{ el.city.city_name }}</p>
+
+                <p>
+                    Чи заблоковано:
+                    {% if el.is_banned %}
+                        <span class="badge badge-danger">Так</span>
+                    {% else %}
+                        <span class="badge badge-success">Ні</span>
+                    {% endif %}
+                </p>
+
+                <div class="rating-container">
+                    <div class="rating-card">
+                        <p class="rating-label">Успішних замовлень:</p>
+                        {{ el.successful_orders_count|default:"—" }}
+                    </div>
+                </div>
+
+                <div class="button-row-user">
+                    <a href="" class="btn btn-warning">Детальніше</a>
+                    {% if not el.is_banned %}
+                        <form method="post" action="{% url 'ban-user' %}" class="btn-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Заблокувати</button>
+                            <input type="hidden" name="user_id" value="{{ el.id }}">
+                        </form>
+                    {% endif %}
+                    {% if el.is_banned %}
+                        <form method="post" action="{% url 'unban-user' %}" class="btn-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Розблокувати</button>
+                            <input type="hidden" name="user_id" value="{{ el.id }}">
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

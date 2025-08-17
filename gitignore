@@ -1,0 +1,66 @@
+# --- Python/Django ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+
+# Бази даних (SQLite – не потрібен, бо ти використовуєш PostgreSQL)
+db.sqlite3
+
+# Медіафайли (завантаження користувачів)
+media/
+
+# Статичні файли, які генеруються (але не твої власні у static/src)
+staticfiles/
+
+# --- Віртуальні середовища ---
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+djvenv/
+
+# --- Тести та кеші ---
+.coverage
+.coverage.*
+*.cover
+htmlcov/
+.tox/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.hypothesis/
+.mypy_cache/
+
+# --- IDE (PyCharm/IntelliJ) ---
+.idea/
+*.iml
+
+# --- VSCode (на випадок якщо відкриєш там) ---
+.vscode/
+.history/
+
+# --- Пакети та збірка ---
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+wheels/
+*.manifest
+*.spec
+
+# --- Інше ---
+*.bak
+
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
